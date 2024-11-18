@@ -1,9 +1,15 @@
 from flask import Flask, request, render_template
+import nvapi
+
 app = Flask(__name__)
 
 @app.route('/')
 def hello():
     return 'Hello, World!'
+
+@app.route('/baseball')
+def baseball():
+    return 'Hello, baseball!'
 
 @app.route('/naver')
 def naver():
@@ -34,7 +40,9 @@ def method():
     else:
         keyword = request.form["keyword"]
         print(keyword)
-        return f"POST로 전달된 당신이 입력한 검색어: {keyword}"
+        data = nvapi.blog(keyword)
+        # return f"POST로 전달된 당신이 입력한 검색어: {keyword}"
+        return render_template("result.html", keyword=keyword, blist=data)
 
 if __name__ == '__main__':
     app.run(debug=True)
